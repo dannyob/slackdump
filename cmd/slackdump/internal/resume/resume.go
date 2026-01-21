@@ -88,6 +88,9 @@ type ResumeParams struct {
 	SkipStaleChannels *extDuration
 	// Dedupe runs duplicate entity cleanup after a successful resume.
 	Dedupe bool
+	// SkipMembers skips fetching channel membership during resume.
+	// Members are typically already in the database from the initial archive.
+	SkipMembers bool
 }
 
 var resumeFlags = ResumeParams{
@@ -106,6 +109,7 @@ func init() {
 	CmdResume.Flag.Var(resumeFlags.SkipStaleThreads, "skip-stale-threads", "skip thread entities whose latest reply is older than this `duration` (default: disabled)")
 	CmdResume.Flag.Var(resumeFlags.SkipStaleChannels, "skip-stale-channels", "skip channel entities whose latest message is older than this `duration` (default: disabled; pair with a periodic full-sweep run)")
 	CmdResume.Flag.BoolVar(&resumeFlags.Dedupe, "dedupe", false, "run dedupe cleanup after successful resume finish")
+	CmdResume.Flag.BoolVar(&resumeFlags.SkipMembers, "skip-members", false, "skip fetching channel membership (faster resume)")
 }
 
 var runDedupe = func(ctx context.Context, conn *sqlx.DB, opts dedupecmd.Options) (dedupecmd.Result, error) {
@@ -201,6 +205,7 @@ func runResume(ctx context.Context, cmd *base.Command, args []string) error {
 		ChannelTypes:  cfg.ChannelTypes,
 		IncludeLabels: cfg.IncludeCustomLabels,
 		MemberOnly:    cfg.MemberOnly,
+		SkipMembers:   resumeFlags.SkipMembers,
 	}
 	// inclusive is false, because we don't want to include the latest message
 	// which is already in the database.
