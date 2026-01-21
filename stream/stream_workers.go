@@ -31,6 +31,11 @@ func (cs *Stream) channelWorker(ctx context.Context, proc processor.Conversation
 	ctx, task := trace.NewTask(ctx, "channelWorker")
 	defer task.End()
 
+	infoFetcher := cs.procChannelInfoWithUsers
+	if cs.skipMembers {
+		infoFetcher = cs.procChannelInfo
+	}
+
 	for {
 		select {
 		case <-ctx.Done():
@@ -40,7 +45,7 @@ func (cs *Stream) channelWorker(ctx context.Context, proc processor.Conversation
 			if !more {
 				return // channel closed
 			}
-			channel, err := cs.procChannelInfoWithUsers(ctx, proc, req.sl.Channel, req.sl.ThreadTS)
+			channel, err := infoFetcher(ctx, proc, req.sl.Channel, req.sl.ThreadTS)
 			if err != nil {
 				results <- Result{Type: RTChannel, ChannelID: req.sl.Channel, Err: err}
 				continue
