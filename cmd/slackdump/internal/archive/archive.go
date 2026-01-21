@@ -227,6 +227,7 @@ func DBController(ctx context.Context, sessionName string, conn *sqlx.DB, client
 		stream.OptOldest(time.Time(cfg.Oldest)),
 		stream.OptResultFn(resultLogger(lg)),
 		stream.OptFailOnNonCritError(cfg.FailOnNonCritical),
+		stream.OptSkipMembers(flags.SkipMembers),
 	}
 	sopts = append(sopts, streamOpts...)
 	// start attachment downloader
