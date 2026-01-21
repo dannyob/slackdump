@@ -199,6 +199,10 @@ it will be stored in the directory.
 .It Fl only-new-users=true|false
 (resume command only) If set to true, inserts only new or updated users into
 the database on subsequent runs. Enabled by default.
+.It Fl skip-members
+(resume command only) Skip fetching channel membership during resume. This
+significantly speeds up resume operations when members are already in the
+database from the initial archive.
 .It Fl resolve
 Enables caching of users for the subcommands of the
 .Cm list
