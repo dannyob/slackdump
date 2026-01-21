@@ -54,6 +54,9 @@ type ResumeParams struct {
 	// new threads on historical messages, otherwise, new threads on old messages
 	// will not be fetched.
 	Lookback *extDuration
+	// SkipMembers skips fetching channel membership during resume.
+	// Members are typically already in the database from the initial archive.
+	SkipMembers bool
 }
 
 var resumeFlags = ResumeParams{
@@ -66,6 +69,7 @@ func init() {
 	CmdResume.Flag.BoolVar(&resumeFlags.IncludeThreads, "threads", false, "include threads (slow, and flaky business)")
 	CmdResume.Flag.BoolVar(&resumeFlags.RecordOnlyNewUsers, "only-new-users", true, "record only new or updated users")
 	CmdResume.Flag.Var(resumeFlags.Lookback, "lookback", "lookback window `duration`")
+	CmdResume.Flag.BoolVar(&resumeFlags.SkipMembers, "skip-members", false, "skip fetching channel membership (faster resume)")
 }
 
 func runResume(ctx context.Context, cmd *base.Command, args []string) error {
@@ -127,6 +131,7 @@ func runResume(ctx context.Context, cmd *base.Command, args []string) error {
 	cf := control.Flags{
 		Refresh:      resumeFlags.Refresh,
 		ChannelUsers: cfg.OnlyChannelUsers,
+		SkipMembers:  resumeFlags.SkipMembers,
 	}
 	// inclusive is false, because we don't want to include the latest message
 	// which is already in the database.
