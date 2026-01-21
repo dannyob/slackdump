@@ -171,6 +171,7 @@ func DBController(ctx context.Context, cmdName string, conn *sqlx.DB, client cli
 		stream.OptLatest(time.Time(cfg.Latest)),
 		stream.OptOldest(time.Time(cfg.Oldest)),
 		stream.OptResultFn(resultLogger(lg)),
+		stream.OptSkipMembers(flags.SkipMembers),
 	}
 	sopts = append(sopts, streamOpts...)
 	// start attachment downloader
