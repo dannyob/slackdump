@@ -53,6 +53,9 @@ type Flags struct {
 	// IncludeLabels requests API to include the labels for the custom fields.
 	// works only with ChannelUsers. Server may throttle requests hard.
 	IncludeLabels bool
+	// SkipMembers skips fetching channel membership during streaming.
+	// Useful for resume when members are already in the database.
+	SkipMembers bool
 }
 
 // Error is a controller error.
