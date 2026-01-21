@@ -35,6 +35,9 @@ type Flags struct {
 	// ChannelTypes is the list of channel types to fetch.  If empty, all
 	// channel types are fetched.
 	ChannelTypes []string // TODO: wire up.
+	// SkipMembers skips fetching channel membership during streaming.
+	// Useful for resume when members are already in the database.
+	SkipMembers bool
 }
 
 // Error is a controller error.
