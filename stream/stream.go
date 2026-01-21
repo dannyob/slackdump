@@ -58,6 +58,7 @@ type Stream struct {
 	fastSearch     bool
 	inclusive      bool
 	failChnlNotFnd bool // if true, will fail if channel not found
+	skipMembers    bool // if true, skip fetching channel members
 	resultFn       []func(sr Result) error
 }
 
@@ -195,6 +196,14 @@ func OptInclusive(b bool) Option {
 func OptFailOnNonCritError(b bool) Option {
 	return func(cs *Stream) {
 		cs.failChnlNotFnd = b
+	}
+}
+
+// OptSkipMembers skips fetching channel members when set to true.
+// Useful for resume operations where members are already in the database.
+func OptSkipMembers(b bool) Option {
+	return func(cs *Stream) {
+		cs.skipMembers = b
 	}
 }
 
