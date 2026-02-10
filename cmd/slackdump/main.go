@@ -37,6 +37,7 @@ import (
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/apiconfig"
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/archive"
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/cfg"
+	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/compact"
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/convertcmd"
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/diag"
 	"github.com/rusq/slackdump/v4/cmd/slackdump/internal/dump"
@@ -65,6 +66,7 @@ func init() {
 		archive.CmdSearch,
 		resume.CmdResume,
 		convertcmd.CmdConvert,
+		compact.CmdCompact,
 		list.CmdList,
 		emoji.CmdEmoji,
 		diag.CmdDiag,
